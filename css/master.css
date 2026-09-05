@@ -1531,6 +1531,7 @@ table {
   box-shadow:
     0 12px 36px rgba(44, 44, 44, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  scroll-margin-top: calc(var(--header-height) + 1rem);
 }
 
 .contact-form__title {
