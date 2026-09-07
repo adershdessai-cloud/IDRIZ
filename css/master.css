@@ -906,90 +906,11 @@ table {
 }
 
 /* --------------------------------------------------------------------------
-   Stats — white section, 4 metric boxes
-   -------------------------------------------------------------------------- */
-.stats {
-  padding: var(--space-4xl) var(--header-pad-x);
-  background: var(--color-white);
-}
-
-.stats__inner {
-  width: min(100%, var(--container-max));
-  margin-inline: auto;
-}
-
-.stats__header {
-  text-align: center;
-  margin-bottom: var(--space-2xl);
-}
-
-.stats__eyebrow {
-  display: inline-block;
-  margin-bottom: var(--space-sm);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-primary);
-}
-
-.stats__title {
-  color: var(--color-charcoal);
-}
-
-.stats__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1rem, 2vw, 1.5rem);
-}
-
-.stat-box {
-  text-align: center;
-  padding: clamp(1.5rem, 3vw, 2.25rem) 1rem;
-  background: var(--color-grey);
-  border: 1px solid var(--color-grey-border);
-  border-radius: var(--radius-lg);
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
-}
-
-.stat-box:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 74, 153, 0.25);
-  box-shadow: var(--shadow-md);
-}
-
-.stat-box__value {
-  display: block;
-  margin-bottom: 0.4rem;
-  font-family: var(--font-heading);
-  font-size: 48px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--color-primary);
-}
-
-.stat-box__label {
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--color-charcoal);
-}
-
-@media (max-width: 767px) {
-  .stat-box__value {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-}
-
-/* --------------------------------------------------------------------------
    Services — 3-column masonry grid
    -------------------------------------------------------------------------- */
 .services {
   padding: var(--space-4xl) var(--header-pad-x);
-  background: var(--color-grey);
+  background: var(--color-white);
 }
 
 .services__inner {
@@ -1859,7 +1780,6 @@ table {
   }
 
   .about__grid,
-  .stats__grid,
   .why-us__grid,
   .testimonials__grid,
   .contact__grid,
@@ -1869,18 +1789,6 @@ table {
 
   .services__grid {
     column-count: 1;
-  }
-
-  .stats__grid {
-    gap: 0.75rem;
-  }
-
-  .stat-box {
-    padding: 1.25rem 0.85rem;
-  }
-
-  .stat-box__value {
-    font-size: 2.25rem;
   }
 
   .testimonial-card__quote {
@@ -1902,10 +1810,6 @@ table {
   .about__grid {
     grid-template-columns: 1fr 1fr;
     gap: 1.75rem;
-  }
-
-  .stats__grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .services__grid {
@@ -1934,10 +1838,6 @@ table {
 @media (min-width: 1024px) {
   .about__grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .stats__grid {
-    grid-template-columns: repeat(4, 1fr);
   }
 
   .services__grid {
