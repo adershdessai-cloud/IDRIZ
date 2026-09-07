@@ -1,5 +1,5 @@
 /**
- * IDRIZ FACILITIES — Contact form live validation
+ * IDRIZ FACILITIES — Contact form live validation + Web3Forms submit
  */
 (function () {
   "use strict";
@@ -16,8 +16,12 @@
   };
 
   const success = form.querySelector(".form-success");
+  const submitBtn = form.querySelector(".btn-submit");
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const phonePattern = /^[+]?[\d\s()-]{7,20}$/;
+
+  const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
+  const ACCESS_KEY = "06aeb75e-dd5f-4a8f-9b14-001b49571f9d";
 
   function getFieldWrap(input) {
     return input.closest(".form-field");
@@ -84,8 +88,7 @@
   function validatePhone(showEmpty) {
     const value = fields.phone.value.trim();
     if (!value) {
-      if (showEmpty) clearStatus(fields.phone);
-      else clearStatus(fields.phone);
+      clearStatus(fields.phone);
       return true;
     }
     if (!phonePattern.test(value)) {
@@ -122,6 +125,28 @@
     return true;
   }
 
+  function showStatus(message, isError) {
+    if (!success) return;
+    success.classList.add("is-visible");
+    success.classList.toggle("is-error", !!isError);
+    success.textContent = message;
+    if (typeof success.focus === "function") success.focus();
+  }
+
+  function hideStatus() {
+    if (!success) return;
+    success.classList.remove("is-visible", "is-error");
+    success.textContent = "";
+  }
+
+  function setSubmitting(isSubmitting) {
+    if (!submitBtn) return;
+    submitBtn.disabled = isSubmitting;
+    submitBtn.setAttribute("aria-busy", isSubmitting ? "true" : "false");
+    const label = submitBtn.querySelector("span");
+    if (label) label.textContent = isSubmitting ? "Sending…" : "Send Request";
+  }
+
   fields.name.addEventListener("input", function () {
     validateName(false);
   });
@@ -156,6 +181,7 @@
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    hideStatus();
 
     const nameOk = validateName(true);
     const emailOk = validateEmail(true);
@@ -168,23 +194,67 @@
         ".form-field.is-invalid .form-field__input, .form-field.is-invalid .form-field__select, .form-field.is-invalid .form-field__textarea"
       );
       if (firstInvalid) firstInvalid.focus();
-      if (success) {
-        success.classList.remove("is-visible");
-        success.textContent = "";
-      }
       return;
     }
 
-    form.reset();
-    Object.keys(fields).forEach(function (key) {
-      clearStatus(fields[key]);
-    });
+    const serviceSelect = fields.service;
+    const serviceLabel =
+      serviceSelect.options[serviceSelect.selectedIndex]
+        ? serviceSelect.options[serviceSelect.selectedIndex].text
+        : fields.service.value;
 
-    if (success) {
-      success.classList.add("is-visible");
-      success.textContent =
-        "Thank you — your enquiry has been received. Our team will respond shortly.";
-      if (typeof success.focus === "function") success.focus();
-    }
+    const payload = {
+      access_key: ACCESS_KEY,
+      subject: "New Website Inquiry from IDRIZ Website",
+      from_name: "Website Visitor",
+      name: fields.name.value.trim(),
+      email: fields.email.value.trim(),
+      phone: fields.phone.value.trim(),
+      service: serviceLabel,
+      message: fields.message.value.trim(),
+    };
+
+    setSubmitting(true);
+
+    fetch(WEB3FORMS_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(function (response) {
+        return response.json().then(function (data) {
+          return { ok: response.ok, data: data };
+        });
+      })
+      .then(function (result) {
+        if (result.ok && result.data && result.data.success) {
+          form.reset();
+          Object.keys(fields).forEach(function (key) {
+            clearStatus(fields[key]);
+          });
+          showStatus(
+            "Thank you — your enquiry has been received. Our team will respond shortly.",
+            false
+          );
+        } else {
+          showStatus(
+            (result.data && result.data.message) ||
+              "Something went wrong. Please try again or email us directly.",
+            true
+          );
+        }
+      })
+      .catch(function () {
+        showStatus(
+          "Unable to send right now. Please try again or email Info@idrizfmservices.com.",
+          true
+        );
+      })
+      .finally(function () {
+        setSubmitting(false);
+      });
   });
 })();

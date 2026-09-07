@@ -1671,9 +1671,25 @@ table {
   display: block;
 }
 
+.form-success.is-error {
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.08);
+  border-color: rgba(198, 40, 40, 0.25);
+}
+
 .form-success:focus {
   outline: 2px solid #1b8a4a;
   outline-offset: 2px;
+}
+
+.form-success.is-error:focus {
+  outline-color: #c62828;
+}
+
+.btn-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* contact columns controlled in responsive section */
